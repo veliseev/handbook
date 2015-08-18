@@ -16,12 +16,9 @@ class WordType extends AbstractType
     {
         $builder
             ->add('word')
-            ->add('explanation')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('synonymsWithMe')
-            ->add('mySynonyms')
-        ;
+            ->add('synonym')
+            ->add('explanation', 'textarea', array(
+                'attr' => array('class' => 'form-control', 'rows' => 2, 'placeholder' => 'Explanation')));
     }
     
     /**

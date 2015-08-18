@@ -32,6 +32,13 @@ class Word
     /**
      * @var string
      *
+     * @ORM\Column(name="synonym", type="string", length=255)
+     */
+    private $synonym;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="explanation", type="string", length=255)
      */
     private $explanation;
@@ -47,26 +54,6 @@ class Word
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Word", mappedBy="mySynonyms")
-     **/
-    private $synonymsWithMe;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Word", inversedBy="synonymsWithMe", cascade={"persist"})
-     * @ORM\JoinTable(name="synonyms",
-     *      joinColumns={@ORM\JoinColumn(name="word_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="synonym_word_id", referencedColumnName="id")}
-     *      )
-     **/
-    private $mySynonyms;
-
-
-    public function __construct() {
-        $this->synonymsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->mySynonyms = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -171,68 +158,25 @@ class Word
     }
 
     /**
-     * Add synonymsWithMe
+     * Set synonym
      *
-     * @param \AppBundle\Entity\Word $synonymsWithMe
+     * @param string $synonym
      * @return Word
      */
-    public function addSynonymsWithMe(\AppBundle\Entity\Word $synonymsWithMe)
+    public function setSynonym($synonym)
     {
-        $this->synonymsWithMe[] = $synonymsWithMe;
+        $this->synonym = $synonym;
 
         return $this;
     }
 
     /**
-     * Remove synonymsWithMe
+     * Get synonym
      *
-     * @param \AppBundle\Entity\Word $synonymsWithMe
+     * @return string 
      */
-    public function removeSynonymsWithMe(\AppBundle\Entity\Word $synonymsWithMe)
+    public function getSynonym()
     {
-        $this->synonymsWithMe->removeElement($synonymsWithMe);
-    }
-
-    /**
-     * Get synonymsWithMe
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSynonymsWithMe()
-    {
-        return $this->synonymsWithMe;
-    }
-
-    /**
-     * Add mySynonyms
-     *
-     * @param \AppBundle\Entity\Word $mySynonyms
-     * @return Word
-     */
-    public function addMySynonym(\AppBundle\Entity\Word $mySynonyms)
-    {
-        $this->mySynonyms[] = $mySynonyms->addSynonymsWithMe($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove mySynonyms
-     *
-     * @param \AppBundle\Entity\Word $mySynonyms
-     */
-    public function removeMySynonym(\AppBundle\Entity\Word $mySynonyms)
-    {
-        $this->mySynonyms->removeElement($mySynonyms);
-    }
-
-    /**
-     * Get mySynonyms
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMySynonyms()
-    {
-        return $this->mySynonyms;
+        return $this->synonym;
     }
 }

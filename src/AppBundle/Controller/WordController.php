@@ -59,7 +59,7 @@ class WordController extends Controller
     /**
      * Creates a new Word entity.
      *
-     * @Route("/", name="word_create")
+     * @Route("/word/create", name="word_create")
      * @Method("POST")
      * @Template("AppBundle:Word:new.html.twig")
      */
@@ -67,14 +67,14 @@ class WordController extends Controller
     {
         $entity = new Word();
         $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
 
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('word_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('word_list', array('id' => $entity->getId())));
         }
 
         return array(
@@ -148,7 +148,7 @@ class WordController extends Controller
     /**
      * Displays a form to edit an existing Word entity.
      *
-     * @Route("/{id}/edit", name="word_edit")
+     * @Route("/edit/{id}", name="word_edit")
      * @Method("GET")
      * @Template()
      */
@@ -167,7 +167,7 @@ class WordController extends Controller
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -183,9 +183,8 @@ class WordController extends Controller
     {
         $form = $this->createForm(new WordType(), $entity, array(
             'action' => $this->generateUrl('word_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'POST',
         ));
-
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
@@ -193,8 +192,8 @@ class WordController extends Controller
     /**
      * Edits an existing Word entity.
      *
-     * @Route("/{id}", name="word_update")
-     * @Method("PUT")
+     * @Route("/word/update/{id}", name="word_update")
+     * @Method("POST")
      * @Template("AppBundle:Word:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
@@ -213,40 +212,38 @@ class WordController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-
             return $this->redirect($this->generateUrl('word_edit', array('id' => $id)));
         }
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
     /**
      * Deletes a Word entity.
      *
-     * @Route("/{id}", name="word_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="word_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+        //if ($form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('AppBundle:Word')->find($id);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:Word')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Word entity.');
-            }
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Word entity.');
+        }
 
             $em->remove($entity);
             $em->flush();
-        }
+        //}
 
-        return $this->redirect($this->generateUrl('word'));
+        return $this->redirect($this->generateUrl('word_list'));
     }
 
     /**
@@ -260,7 +257,7 @@ class WordController extends Controller
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('word_delete', array('id' => $id)))
-            ->setMethod('DELETE')
+            ->setMethod('GET')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;

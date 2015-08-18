@@ -17,6 +17,7 @@ class WordRepository extends EntityRepository
         $q = $this->createQueryBuilder('w')
             ->where('w.word LIKE :match')
             ->orWhere('w.explanation LIKE :match')
+            ->orWhere('w.synonym LIKE :match')
             ->setParameter('match', '%'.$match.'%')
             ->orderBy('w.word', 'ASC')
             ->getQuery()

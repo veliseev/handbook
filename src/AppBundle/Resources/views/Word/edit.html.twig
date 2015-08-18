@@ -1,6 +1,42 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+
+    <div class="jumbotron jumbotron-mt">
+        <div class="row">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="{{ form.vars.name }}" name="{{ form.vars.name }}" action="{{ path('word_update', {'id': entity.id}) }}" method="post">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+                                        class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            <h4 class="modal-title custom_align" id="Heading">Edit word</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                {{ form_widget(form.word, {'attr': {'class': 'form-control', 'type': 'text', 'placeholder': 'Word'} }) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_widget(form.synonym, {'attr': {'class': 'form-control', 'type': 'text', 'placeholder': 'Synonym'} }) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_widget(form.explanation) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;" ><span
+                                        class="glyphicon glyphicon-ok-sign"></span> Update
+                            </button>
+                        </div>
+                        {{ form_widget(form._token) }}
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+
+{#
     <h1>Word edit</h1>
 
     {{ form(edit_form) }}
@@ -12,5 +48,5 @@
         </a>
     </li>
     <li>{{ form(delete_form) }}</li>
-</ul>
+</ul>#}
 {% endblock %}
