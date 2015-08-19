@@ -26,14 +26,14 @@
                     <ul class="list-group">
                         {% for word in words %}
                         <li class="list-group-item">
-                            <div class="row toggle" id="dropdown-detail-1" data-toggle="detail-1">
+                            <div class="row toggle" id="dropdown-detail-{{ word.id }}" data-toggle="detail-{{ word.id }}">
                                 <div class="col-xs-12">
                                   {{ word.getWord() }}
                                     <i class="glyphicon glyphicon-chevron-down pull-right"></i>
                                 </div>
                             </div>
-                            <div id="detail-1">
-                                <hr></hr>
+                            <div id="detail-{{ word.id }}">
+                                <hr/>
                                 <div class="container">
                                     <div class="fluid-row">
                                         <div class="col-xs-1">

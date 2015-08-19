@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -28,6 +29,7 @@ class WordController extends Controller
     {
         $search = $request->get('word', null);
         $words  = array();
+
         if ($request->getMethod() == 'POST') {
             $em    = $this->getDoctrine()->getManager();
             $words = $em->getRepository('AppBundle:Word')->findWords($search);
@@ -42,18 +44,25 @@ class WordController extends Controller
     /**
      * Lists all Word entities.
      *
-     * @Route("/list", name="word_list")
+     * @Route("/list/{page}", defaults={"page" = 1}, requirements={"page": "\d+"}, name="word_list")
      * @Method("GET")
      * @Template()
      */
-    public function listAction()
+    public function listAction($page)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:Word')->findAll();
+        $query = $em->getRepository('AppBundle:Word')->getFindAllQuery();
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $page,
+            $this->container->getParameter('appbundle_word_count_per_page')
+        );
 
         return array(
-            'entities' => $entities,
+            'pagination' => $pagination
         );
     }
     /**

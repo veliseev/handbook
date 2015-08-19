@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 
 /**
  * WordRepository
@@ -13,7 +12,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class WordRepository extends EntityRepository
 {
-    public function findWords ($match = ''){
+    public function findWords($match = '')
+    {
         $q = $this->createQueryBuilder('w')
             ->where('w.word LIKE :match')
             ->orWhere('w.explanation LIKE :match')
@@ -24,5 +24,10 @@ class WordRepository extends EntityRepository
             ->getResult();
 
         return $q;
+    }
+
+    public function getFindAllQuery()
+    {
+        return $this->createQueryBuilder('w')->getQuery();
     }
 }

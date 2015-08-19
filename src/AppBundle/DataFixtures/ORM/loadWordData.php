@@ -17,7 +17,11 @@ class loadWordData  implements FixtureInterface {
     {
         $words = array(
             'бег' => array('synonyms'=>'спорт, кросс, марафон', 'explanation'=>'Движение куда-н., передвижение, при к-ром быстро и резко отталкиваются ногами от земли.'),
-            'полет' => array('synonyms'=>'парение, планирование', 'explanation'=>'Движение, передвижение по воздуху.'));
+            'полет' => array('synonyms'=>'парение, планирование', 'explanation'=>'Движение, передвижение по воздуху.'),
+            'прыжки' => array('synonyms'=>'прыжок', 'explanation'=>'Отталкивание от земли в каком-либо направлении.'),
+            'плавание' => array('synonyms'=>'спорт', 'explanation'=>'Передвижение по воде.'),
+            'баскетбол' => array('synonyms'=>'спорт', 'explanation'=>'Командная игра с мячом.')
+        );
 
         foreach($words as $key => $value){
             $word = new Word();

@@ -1,0 +1,90 @@
+{#
+/**
+ * @file
+ * Twitter Bootstrap v3 Sliding pagination control implementation.
+ *
+ * View that can be used with the pagination module
+ * from the Twitter Bootstrap CSS Toolkit
+ * http://getbootstrap.com/components/#pagination
+ *
+ * @author Pablo Díez <pablodip@gmail.com>
+ * @author Jan Sorgalla <jsorgalla@gmail.com>
+ * @author Artem Ponomarenko <imenem@inbox.ru>
+ * @author Artem Zabelin <artjomzabelin@gmail.com>
+ */
+#}
+
+{% if pageCount > 1 %}
+    <ul class="pagination pull-right">
+
+    {% if previous is defined %}
+        <li>
+            <a href="{{ path(route, { (pageParameterName): previous }) }}"><span class="glyphicon glyphicon-chevron-left"></span></a>
+        </li>
+    {% else %}
+        <li class="disabled">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </li>
+    {% endif %}
+
+        {#startPage: {{ startPage }}#}
+    {% if startPage > 1 %}
+        <li>
+            <a href="{{ path(route, {(pageParameterName): 1}) }}">1</a>
+        </li>
+        {% if startPage == 3 %}
+            <li>
+                <a href="{{ path(route, {(pageParameterName): 2}) }}">2</a>
+            </li>
+        {% elseif startPage != 2 %}
+        <li class="disabled">
+            <span>&hellip;</span>
+        </li>
+        {% endif %}
+    {% endif %}
+
+    {% for page in pagesInRange %}
+        {#Page: {{ page }}#}
+        {% if page != current %}
+            <li>
+                <a href="{{ path(route, {(pageParameterName): page}) }}">{{ page }}</a>
+            </li>
+        {% else %}
+            <li class="active">
+                <span>{{ page }}</span>
+            </li>
+        {% endif %}
+
+    {% endfor %}
+
+        {#pageCount: {{ pageCount }}
+        endPage: {{ endPage }}#}
+    {% if pageCount > endPage %}
+        {% if pageCount > (endPage + 1) %}
+            {% if pageCount > (endPage + 2) %}
+                <li class="disabled">
+                    <span>&hellip;</span>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path(route, {(pageParameterName): pageCount - 1}) }}">{{ pageCount -1 }}</a>
+                </li>
+            {% endif %}
+        {% endif %}
+        <li>
+            <a href="{{ path(route, {(pageParameterName): pageCount}) }}">{{ pageCount }}</a>
+        </li>
+    {% endif %}
+
+    {% if next is defined %}
+        <li>
+            <a href="{{ path(route, {(pageParameterName): next}) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+        </li>
+    {% else %}
+        <li class="disabled">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </li>
+    {% endif %}
+
+    </ul>
+{% endif %}
