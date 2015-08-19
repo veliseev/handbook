@@ -61,7 +61,6 @@ $(document).ready(function() {
                 'word': term
             },
             success: function(data) {
-                console.log(data);
                 $('#search_results').html(data);
                 $('[id^=detail-]').hide();
             }
