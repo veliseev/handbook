@@ -1,18 +1,26 @@
-$(document).ready (function(){
-    $('#search_word_submit').click(function () {
-        $('#search_word_form').submit();
+$(document).ready(function() {
+    $(document).on('keypress', function(event) {
+        if (event.which == 13) {
+            search($('[name=word]').val());
+            event.preventDefault();
+        }
+    });
+
+    $('#search_word_submit').click(function(event) {
+        search(term);
+        event.preventDefault();
     });
 
     $('[id^=detail-]').hide();
 
-    $('.toggle').click(function() {
+    $('#search_results').on('click', '.toggle', function() {
         $input = $(this);
         $target = $('#' + $input.attr('data-toggle'));
         $target.slideToggle();
     });
 
-    $('li.list-group-item .toggle').hover(function(){
-        $(this).css( 'cursor', 'pointer' );
+    $('#search_results').on('mouseenter', 'li.list-group-item .toggle', function() {
+        $(this).css('cursor', 'pointer');
     });
 
     $("#mytable #checkall").click(function () {
@@ -29,4 +37,33 @@ $(document).ready (function(){
     });
 
     $("[data-toggle=tooltip]").tooltip();
+
+    var timeout = null;
+
+    $('[name=word]').keyup(function(key) {
+        if (this.value.length >= 3) {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+
+            timeout = setTimeout(function(term) {
+                search(term);
+            }, 1000, $('[name=word]').val());
+        }
+    });
+
+    function search(term)
+    {
+        $.ajax({
+            url: $('#search_word_form').attr('action'),
+            method: 'post',
+            data: {
+                'word': term
+            },
+            success: function(data) {
+                $('#search_results').html(data);
+                $('[id^=detail-]').hide();
+            }
+        });
+    }
 });

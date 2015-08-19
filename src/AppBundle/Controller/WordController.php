@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Word;
 use AppBundle\Form\WordType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Word controller.
@@ -28,11 +29,18 @@ class WordController extends Controller
     public function indexAction(Request $request)
     {
         $search = $request->get('word', null);
-        $words  = array();
+        $words = array();
 
         if ($request->getMethod() == 'POST') {
             $em    = $this->getDoctrine()->getManager();
             $words = $em->getRepository('AppBundle:Word')->findWords($search);
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return new Response($this->renderView('AppBundle:Word:search_results.html.twig', array(
+                'words' => $words,
+                'search'=> $search
+            )));
         }
 
         return array(

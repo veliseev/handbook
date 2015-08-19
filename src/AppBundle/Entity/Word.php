@@ -31,6 +31,13 @@ class Word
 
     /**
      * @var string
+     * @ORM\Column(name="slug", type="string", length=255)
+     * @Gedmo\Slug(fields={"word"}, separator="_")
+     */
+    private $slug;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="synonym", type="string", length=255)
      */
@@ -178,5 +185,28 @@ class Word
     public function getSynonym()
     {
         return $this->synonym;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Word
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }

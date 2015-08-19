@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Search results for "{{ search }}"</h3>
+    </div>
+    <ul class="list-group">
+        {% for word in words %}
+            <li class="list-group-item">
+                <div class="row toggle" id="dropdown-detail-{{ word.id }}" data-toggle="detail-{{ word.id }}">
+                    <div class="col-xs-12">
+                        {{ word.getWord() }}
+                        <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                    </div>
+                </div>
+                <div id="detail-{{ word.id }}">
+                    <hr/>
+                    <div class="container">
+                        <div class="fluid-row">
+                            <div class="col-xs-1">
+                                Synonyms:
+                            </div>
+                            <div class="col-xs-5">
+                                {{ word.synonym }}
+                            </div>
+                            <div class="col-xs-1">
+                                Explanation:
+                            </div>
+                            <div class="col-xs-5">
+                                {{ word.getExplanation() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
