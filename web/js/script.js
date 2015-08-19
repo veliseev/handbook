@@ -7,7 +7,7 @@ $(document).ready(function() {
     });
 
     $('#search_word_submit').click(function(event) {
-        search(term);
+        search($('[name=word]').val());
         event.preventDefault();
     });
 
@@ -61,6 +61,7 @@ $(document).ready(function() {
                 'word': term
             },
             success: function(data) {
+                console.log(data);
                 $('#search_results').html(data);
                 $('[id^=detail-]').hide();
             }
