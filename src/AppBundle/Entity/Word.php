@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\WordRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Word
 {
@@ -31,8 +32,7 @@ class Word
 
     /**
      * @var string
-     * @ORM\Column(name="slug", type="string", length=255)
-     * @Gedmo\Slug(fields={"word"}, separator="_")
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     private $slug;
 
@@ -205,8 +205,34 @@ class Word
      */
     public function setSlug($slug)
     {
-        $this->slug = $slug;
+        $this->slug = $this->slugify($slug);
 
         return $this;
+    }
+
+    private function slugify($text, $separator = '-')
+    {
+
+        $text = strtolower($text);
+
+
+        // Remove all none word characters
+        //$text = preg_replace('/\W{Cyrillic}/', '-', $text);
+
+
+        // More stripping. Replace spaces with dashes TODO Fix later
+/*        $text = strtolower(preg_replace('/[^A-Za-z0-9\/]+{Cyrillic}/', $separator,
+            preg_replace('/([a-z\d]{Cyrillic})([A-Z]){Cyrillic}/', '\1_\2',
+                preg_replace('/([A-Z]+)([A-Z][a-z]){Cyrillic}/', '\1_\2',
+                    preg_replace('/::/', '/', $text)))));*/
+
+        //return trim($text, $separator);
+        return str_replace(' ', $separator, $text);
+    }
+
+    /** @ORM\PrePersist */
+    public function setSlugValue()
+    {
+        $this->slug = $this->slugify($this->word);
     }
 }

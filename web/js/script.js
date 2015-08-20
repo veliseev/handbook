@@ -121,8 +121,8 @@ $(document).ready(function() {
 
     function highlight(word, searchTerm)
     {
-        word = escape(word);
-        searchTerm = escape(searchTerm);
+        //word = escape(word);
+        //searchTerm = escape(searchTerm);
 
         var indexFoundAt = word.toLowerCase().indexOf(searchTerm.toLowerCase());
 

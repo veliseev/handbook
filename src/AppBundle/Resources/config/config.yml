@@ -11,3 +11,10 @@ knp_paginator:
 
 parameters:
     appbundle_word_count_per_page: 1
+
+services:
+    my.listener:
+        class: AppBundle\EventListener\WordEventListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+        arguments: [@router]

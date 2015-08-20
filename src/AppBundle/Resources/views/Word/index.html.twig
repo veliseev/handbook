@@ -8,18 +8,19 @@
                 <div id="custom-search-input">
                     <div class="input-group col-md-12">
                         <form id="search_word_form" name="search_word_form" method="post" action="{{ path('word') }}">
+                            <img id="loader" src="{{ asset('images/loader.gif') }}" />
                             <input type="text" name="word" class="form-control input-lg" placeholder="Type word..." />
                         </form>
-                    <span class="input-group-btn">
-                        <button id="search_word_submit" class="btn btn-info btn-lg" type="button">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </span>
+                        <span class="input-group-btn">
+                            <button id="search_word_submit" class="btn btn-info btn-lg" type="button">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
                 <br>
                 <div id="search_results_container">
-                    <img id="loader" src="{{ asset('images/loader.gif') }}" />
+                    {#<img id="loader" src="{{ asset('images/loader.gif') }}" />#}
                     <div id="search_results">
                         {% if words|length > 0 %}
                             {{ include('AppBundle:Word:search_results.html.twig') }}
