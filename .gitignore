@@ -1,4 +1,6 @@
 .idea
+/nbproject
+*~
 /app/bootstrap.php.cache
 /app/cache/*
 !app/cache/.gitkeep

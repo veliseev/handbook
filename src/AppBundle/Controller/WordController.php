@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -11,6 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Word;
 use AppBundle\Form\WordType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Word controller.
@@ -37,10 +41,16 @@ class WordController extends Controller
         }
 
         if ($request->isXmlHttpRequest()) {
-            return new Response($this->renderView('AppBundle:Word:search_results.html.twig', array(
+            $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
+
+            $words = $serializer->serialize($words, 'json');
+
+            return new JsonResponse($words);
+
+            /*return new Response($this->renderView('AppBundle:Word:search_results.html.twig', array(
                 'words' => $words,
                 'search'=> $search
-            )));
+            )));*/
         }
 
         return array(
@@ -165,22 +175,22 @@ class WordController extends Controller
     /**
      * Displays a form to edit an existing Word entity.
      *
-     * @Route("/edit/{id}", name="word_edit")
+     * @Route("/edit/{slug}", name="word_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Word')->find($id);
+        $entity = $em->getRepository('AppBundle:Word')->findOneBy(array('slug' => $slug));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Word entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
             'entity'      => $entity,

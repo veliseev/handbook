@@ -18,10 +18,13 @@
                     </div>
                 </div>
                 <br>
-                <div id="search_results">
-                    {% if words|length > 0 %}
-                        {{ include('AppBundle:Word:search_results.html.twig') }}
-                    {% endif %}
+                <div id="search_results_container">
+                    <img id="loader" src="{{ asset('images/loader.gif') }}" />
+                    <div id="search_results">
+                        {% if words|length > 0 %}
+                            {{ include('AppBundle:Word:search_results.html.twig') }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
