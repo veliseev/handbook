@@ -7,7 +7,7 @@ $(document).ready(function() {
     });
 
     $('#search_word_submit').click(function(event) {
-        search(term);
+        search($('[name=word]').val());
         event.preventDefault();
     });
 

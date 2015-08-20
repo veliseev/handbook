@@ -26,6 +26,7 @@ class loadWordData  implements FixtureInterface {
         foreach($words as $key => $value){
             $word = new Word();
             $word->setWord($key);
+            $word->setSlug($key);
             $word->setSynonym($value['synonyms']);
             $word->setExplanation($value['explanation']);
             $manager->persist($word);
