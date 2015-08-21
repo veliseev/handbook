@@ -8,8 +8,12 @@
                 <div id="custom-search-input">
                     <div class="input-group col-md-12">
                         <form id="search_word_form" name="search_word_form" method="post" action="{{ path('word') }}">
-                            <img id="loader" src="{{ asset('images/loader.gif') }}" />
-                            <input type="text" name="word" class="form-control input-lg" placeholder="Type word..." />
+                            <div class="input-group">
+                                <div class="input-group-addon"><img id="loader" src="{{ asset('images/loader.gif') }}" /></div>
+                                <input type="text" name="word" class="form-control input-lg" placeholder="Type word...">
+                            </div>
+
+                            {#<input type="text" name="word" class="form-control input-lg" placeholder="Type word..." />#}
                         </form>
                         <span class="input-group-btn">
                             <button id="search_word_submit" class="btn btn-info btn-lg" type="button">

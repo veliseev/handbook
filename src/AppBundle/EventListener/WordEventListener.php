@@ -28,6 +28,10 @@ class WordEventListener
 
             unset($matches[0]);
 
+            if (!count($matches[1])) {
+                return;
+            }
+
             foreach ($matches as $match) {
                 $query = $entityManager->createQuery('SELECT w FROM AppBundle:Word w WHERE w.slug = :slug')
                     ->setParameter('slug', $match[0]);

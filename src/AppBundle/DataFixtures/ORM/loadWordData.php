@@ -12,7 +12,8 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\Word;
 
-class loadWordData  implements FixtureInterface {
+class loadWordData implements FixtureInterface
+{
     public function load(ObjectManager $manager)
     {
         $words = array(

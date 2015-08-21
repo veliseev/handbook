@@ -45,17 +45,19 @@ $(document).ready(function() {
             clearTimeout(timeout);
         }
 
-        if (this.value.length >= 3) {
-            if (event.which != 13) {
-                $('#loader').show();
-                $('#search_results').html('');
+        if (event.which == 13) {
+            return;
+        }
 
-                timeout = setTimeout(function (term) {
-                    search(term);
-                }, 1000, $('[name=word]').val());
-            }
+        if (this.value.length >= 3) {
+            $('#loader').css('visibility', 'visible');
+            $('#search_results').html('');
+
+            timeout = setTimeout(function (term) {
+                search(term);
+            }, 1000, $('[name=word]').val());
         } else {
-            $('#loader').hide();
+            $('#loader').css('visibility', 'hidden');
             $('#search_results').html('');
         }
     });
@@ -72,7 +74,7 @@ $(document).ready(function() {
             success: function(data) {
                 showResults(searchTerm, JSON.parse(data));
                 $('[id^=detail-]').hide();
-                $('#loader').hide();
+                $('#loader').css('visibility', 'hidden');
             }
         });
     }

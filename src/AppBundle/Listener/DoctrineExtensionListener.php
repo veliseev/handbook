@@ -20,7 +20,7 @@ class DoctrineExtensionListener implements ContainerAwareInterface {
     public function onLateKernelRequest(GetResponseEvent $event)
     {
         $timestampable = $this->container->get('gedmo.listener.timestampable');
-        $sluggable = $this->container->get('gedmo.listener.sluggable');
+        //$sluggable = $this->container->get('gedmo.listener.sluggable');
     }
 
     public function onKernelRequest(GetResponseEvent $event)
