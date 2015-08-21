@@ -14,16 +14,28 @@ class WordRepository extends EntityRepository
 {
     public function findWords($match = '')
     {
-        $q = $this->createQueryBuilder('w')
+        $words = $this->createQueryBuilder('w')
             ->where('w.word LIKE :match')
             ->orWhere('w.explanation LIKE :match')
             ->orWhere('w.synonym LIKE :match')
-            ->setParameter('match', '%'.$match.'%')
+            ->setParameter('match', '%' . $match . '%')
             ->orderBy('w.word', 'ASC')
             ->getQuery()
             ->getResult();
 
-        return $q;
+        // As "a" tags are saved in columns, we have to remove them before making search.
+        foreach ($words as $i => $word) {
+            $synonym = strip_tags($word->getSynonym());
+            $explanation = strip_tags($word->getExplanation());
+
+            if (stripos($word->getWord(), $match) === false
+                && stripos($synonym, $match) === false
+                && stripos($explanation, $match) === false) {
+                unset($words[$i]);
+            }
+        }
+
+        return $words;
     }
 
     public function getFindAllQuery()

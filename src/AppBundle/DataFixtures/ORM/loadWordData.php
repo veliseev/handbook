@@ -24,7 +24,7 @@ class loadWordData implements FixtureInterface
             'баскетбол' => array('synonyms'=>'спорт', 'explanation'=>'Командная игра с мячом.')
         );
 
-        foreach($words as $key => $value){
+        foreach ($words as $key => $value) {
             $word = new Word();
             $word->setWord($key);
             $word->setSlug($key);

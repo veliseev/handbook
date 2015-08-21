@@ -134,6 +134,8 @@ $(document).ready(function() {
             word = word.replace(stringToReplace, replacement);
         }
 
+        console.log(word);
+
         return word;
     }
 

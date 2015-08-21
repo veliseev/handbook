@@ -36,7 +36,10 @@ class WordController extends Controller
         $words = array();
 
         if ($request->getMethod() == 'POST') {
-            $em    = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
+
+            // Remove everything that is not a letter and digit.
+            $search = preg_replace('/[^\w0-9]/u', '', $search);
             $words = $em->getRepository('AppBundle:Word')->findWords($search);
         }
 
@@ -46,11 +49,6 @@ class WordController extends Controller
             $words = $serializer->serialize($words, 'json');
 
             return new JsonResponse($words);
-
-            /*return new Response($this->renderView('AppBundle:Word:search_results.html.twig', array(
-                'words' => $words,
-                'search'=> $search
-            )));*/
         }
 
         return array(
@@ -189,12 +187,14 @@ class WordController extends Controller
             throw $this->createNotFoundException('Unable to find Word entity.');
         }
 
+        $entity->setSynonym(strip_tags($entity->getSynonym()));
+
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -212,6 +212,7 @@ class WordController extends Controller
             'action' => $this->generateUrl('word_update', array('id' => $entity->getId())),
             'method' => 'POST',
         ));
+
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
@@ -239,12 +240,12 @@ class WordController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('word_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('word_edit', array('slug' => $entity->getSlug())));
         }
 
         return array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
