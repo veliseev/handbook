@@ -23,7 +23,7 @@
                 {% for entity in pagination %}
                     <tr>
                         <td><input type="checkbox" class="checkthis" /></td>
-                        <td>{{ entity.word }}</td>
+                        <td>{{ entity.word|raw }}</td>
                         <td>{{ entity.synonym|raw }}</td>
                         <td>{{ entity.explanation|raw }}</td>
                         <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y.m.d H:i:s') }}{% endif %}</td>
