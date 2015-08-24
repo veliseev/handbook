@@ -5,7 +5,6 @@ namespace AppBundle\EventListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 // for Doctrine 2.4: Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use AppBundle\Entity\Word;
 use Symfony\Component\Routing\Router;
 
 class WordEventSubscriber implements EventSubscriber
@@ -42,39 +41,39 @@ class WordEventSubscriber implements EventSubscriber
 
         $matchesFromSynonym = array();
         $matchesFromExplanation = array();
-        // Get words in brackets.
+
+        // Get words in brackets...
         preg_match_all('/\[([^\[]+)\]/', $entity->getSynonym(), $matchesFromSynonym);
         preg_match_all('/\[([^\[]+)\]/', $entity->getExplanation(), $matchesFromExplanation);
 
-        unset($matchesFromSynonym[0], $matchesFromExplanation[0]);
+        // ... and wrap them in links.
+        if (count($matchesFromSynonym[1])) {
+            foreach ($matchesFromSynonym[1] as $match) {
+                $query = $entityManager->createQuery('SELECT w FROM AppBundle:Word w WHERE w.slug = :slug')
+                    ->setParameter('slug', $match);
 
-        if (!count($matchesFromSynonym[1]) && !count($matchesFromExplanation[1])) {
-            return;
-        }
+                if ($word = $query->getOneOrNullResult()) {
+                    $url = $this->router->generate('word_edit', array('slug' => $word->getSlug()));
 
-        foreach ($matchesFromSynonym as $match) {
-            $query = $entityManager->createQuery('SELECT w FROM AppBundle:Word w WHERE w.slug = :slug')
-                ->setParameter('slug', $match[0]);
-
-            if ($word = $query->getOneOrNullResult()) {
-                $url = $this->router->generate('word_edit', array('slug' => $word->getSlug()));
-
-                $entity->setSynonym(
-                    str_replace('[' . $match[0] . ']', '<a href="' . $url . '">[' . $match[0] . ']</a>', $entity->getSynonym())
-                );
+                    $entity->setSynonym(
+                        str_replace('[' . $match . ']', '<a href="' . $url . '">[' . $match . ']</a>', $entity->getSynonym())
+                    );
+                }
             }
         }
 
-        foreach ($matchesFromExplanation as $match) {
-            $query = $entityManager->createQuery('SELECT w FROM AppBundle:Word w WHERE w.slug = :slug')
-                ->setParameter('slug', $match[0]);
+        if (count($matchesFromExplanation[1])) {
+            foreach ($matchesFromExplanation[1] as $match) {
+                $query = $entityManager->createQuery('SELECT w FROM AppBundle:Word w WHERE w.slug = :slug')
+                    ->setParameter('slug', $match);
 
-            if ($word = $query->getOneOrNullResult()) {
-                $url = $this->router->generate('word_edit', array('slug' => $word->getSlug()));
+                if ($word = $query->getOneOrNullResult()) {
+                    $url = $this->router->generate('word_edit', array('slug' => $word->getSlug()));
 
-                $entity->setExplanation(
-                    str_replace('[' . $match[0] . ']', '<a href="' . $url . '">[' . $match[0] . ']</a>', $entity->getExplanation())
-                );
+                    $entity->setExplanation(
+                        str_replace('[' . $match . ']', '<a href="' . $url . '">[' . $match . ']</a>', $entity->getExplanation())
+                    );
+                }
             }
         }
     }

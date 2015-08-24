@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Word
@@ -27,6 +28,7 @@ class Word
      * @var string
      *
      * @ORM\Column(name="word", type="string", length=255)
+     * @Assert\Regex("/^[\w0-9- ]+$/u")
      */
     private $word;
 
@@ -40,6 +42,7 @@ class Word
      * @var string
      *
      * @ORM\Column(name="synonym", type="string", length=255)
+     * @Assert\Regex("/^[\w0-9, \[\]]+$/u")
      */
     private $synonym;
 
@@ -47,6 +50,7 @@ class Word
      * @var string
      *
      * @ORM\Column(name="explanation", type="string", length=255)
+     * @Assert\Regex("/^[\w0-9,.!?- \[\]]+$/u")
      */
     private $explanation;
 

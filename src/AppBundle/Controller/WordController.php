@@ -38,8 +38,8 @@ class WordController extends Controller
         if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
 
-            // Remove everything that is not a letter and digit.
-            $search = preg_replace('/[^\w0-9]/u', '', $search);
+            // Remove everything that is not a letter, digit or space.
+            $search = preg_replace('/[^\w0-9 ]/u', '', $search);
             $words = $em->getRepository('AppBundle:Word')->findWords($search);
         }
 
@@ -94,6 +94,7 @@ class WordController extends Controller
         $form = $this->createCreateForm($entity);
 
         $form->handleRequest($request);
+
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);

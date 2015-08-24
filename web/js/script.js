@@ -121,20 +121,25 @@ $(document).ready(function() {
         $('#search_results').html(html);
     }
 
+    function stripATag(string)
+    {
+        return string.replace(/<a\b[^>]+>([^<]*(?:(?!<\/a)<[^<]*)*)<\/a>/, '$1');
+    }
+
     function highlight(word, searchTerm)
     {
         //word = escape(word);
         //searchTerm = escape(searchTerm);
 
-        var indexFoundAt = word.toLowerCase().indexOf(searchTerm.toLowerCase());
+        var strippedWord = stripATag(word);
+
+        var indexFoundAt = strippedWord.toLowerCase().indexOf(searchTerm.toLowerCase());
 
         if (indexFoundAt != -1) {
-            var stringToReplace = word.substr(indexFoundAt, searchTerm.length);
+            var stringToReplace = strippedWord.substr(indexFoundAt, searchTerm.length);
             var replacement = '<span class="highlighted">' + stringToReplace + '</span>'
             word = word.replace(stringToReplace, replacement);
         }
-
-        console.log(word);
 
         return word;
     }

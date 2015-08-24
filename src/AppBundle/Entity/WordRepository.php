@@ -40,6 +40,8 @@ class WordRepository extends EntityRepository
 
     public function getFindAllQuery()
     {
-        return $this->createQueryBuilder('w')->getQuery();
+        return $this->createQueryBuilder('w')
+            ->orderBy('w.word', 'ASC')
+            ->getQuery();
     }
 }
