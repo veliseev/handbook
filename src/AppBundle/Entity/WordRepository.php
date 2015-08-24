@@ -25,14 +25,38 @@ class WordRepository extends EntityRepository
 
         // As "a" tags are saved in columns, we have to remove them before making search.
         foreach ($words as $i => $word) {
-            $synonym = strip_tags($word->getSynonym());
-            $explanation = strip_tags($word->getExplanation());
+            $strippedSynonym = strip_tags($word->getSynonym());
+            $strippedExplanation = strip_tags($word->getExplanation());
 
             if (stripos($word->getWord(), $match) === false
-                && stripos($synonym, $match) === false
-                && stripos($explanation, $match) === false) {
+                && stripos($strippedSynonym, $match) === false
+                && stripos($strippedExplanation, $match) === false) {
                 unset($words[$i]);
             }
+
+            /*$wordMatched = false;
+
+            if (stripos($word->getWord(), $match) !== false) {
+                $wordMatched = true;
+                $word->setWord(str_replace($match, '<span class="highlighted">' . $match . '</span>', $word->getWord()));
+            }
+
+            if (stripos($strippedSynonym, $match) !== false) {
+                $wordMatched = true;
+
+                if ($strippedSynonym === $word->getSynonym()) {
+                    $word->setSynonym(str_replace($match, '<span class="highlighted">' . $match . '</span>', $strippedSynonym));
+                } else {
+                    $word->setSynonym(preg_replace_callback('/(<a\b[^>]+>)([^<]*(?:(?!<\/a)<[^<]*)*)(<\/a>)/', function($matches) use ($match) {
+                        $matches[2] = str_replace($match, '<span class="highlighted">' . $match . '</span>', $matches[2]);
+                        return $matches[1] . $matches[2] . $matches[3];
+                    }, $word->getSynonym()));
+                }
+            }
+
+            if (!$wordMatched) {
+                unset($words[$i]);
+            }*/
         }
 
         return $words;

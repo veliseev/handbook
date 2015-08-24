@@ -96,7 +96,7 @@ $(document).ready(function() {
                 html += '<li class="list-group-item">'
                       + '<div class="row toggle" id="dropdown-detail-' + word.id + '" data-toggle="detail-' + word.id + '">'
                       + '<div class="col-xs-12">'
-                      + highlight(word.word, searchTerm) + '<i class="glyphicon glyphicon-chevron-down pull-right"></i>'
+                      + hilite(word.word, searchTerm) + '<i class="glyphicon glyphicon-chevron-down pull-right"></i>'
                       + '</div>'
                       + '</div>'
                       + '<div id="detail-' + word.id + '">'
@@ -104,9 +104,9 @@ $(document).ready(function() {
                       + '<div class="container">'
                       + '<div class="fluid-row">'
                       + '<div class="col-xs-1">Synonyms:</div>'
-                      + '<div class="col-xs-5">' + highlight(word.synonym, searchTerm) + '</div>'
+                      + '<div class="col-xs-5">' + hilite(word.synonym, searchTerm) + '</div>'
                       + '<div class="col-xs-1">Explanation:</div>'
-                      + '<div class="col-xs-5">' + highlight(word.explanation, searchTerm) + '</div>'
+                      + '<div class="col-xs-5">' + hilite(word.explanation, searchTerm) + '</div>'
                       + '</div>'
                       + '</div>'
                       + '</div>'
@@ -121,25 +121,38 @@ $(document).ready(function() {
         $('#search_results').html(html);
     }
 
-    function stripATag(string)
+    function hilite(word, searchTerm)
     {
-        return string.replace(/<a\b[^>]+>([^<]*(?:(?!<\/a)<[^<]*)*)<\/a>/, '$1');
-    }
+        var linkPattern = /(<a\b[^>]+>)([^<]*(?:(?!<\/a)<[^<]*)*)(<\/a>)/g;
+        var links = [];
 
-    function highlight(word, searchTerm)
-    {
-        //word = escape(word);
-        //searchTerm = escape(searchTerm);
+        var i = 0;
 
-        var strippedWord = stripATag(word);
+        // First, we extract links from a word and replace them with $n (n = 1, 2, 3,.. ).
+        // The links themselves are highlighted (if there is a match).
+        word = word.replace(linkPattern, function(match, p1, p2, p3) {
+            var indexFoundAt = p2.toLowerCase().indexOf(searchTerm.toLowerCase());
 
-        var indexFoundAt = strippedWord.toLowerCase().indexOf(searchTerm.toLowerCase());
+            if (indexFoundAt != -1) {
+                p2 = p2.replace(searchTerm, '<span class="highlighted">' + searchTerm + '</span>');
+            }
+
+            links.push(p1 + p2 + p3);
+
+            return '$' + (++i);
+        });
+
+        // Second, we search for a match in the modified word.
+        var indexFoundAt = word.toLowerCase().indexOf(searchTerm.toLowerCase());
 
         if (indexFoundAt != -1) {
-            var stringToReplace = strippedWord.substr(indexFoundAt, searchTerm.length);
-            var replacement = '<span class="highlighted">' + stringToReplace + '</span>'
-            word = word.replace(stringToReplace, replacement);
+            word = word.replace(searchTerm, '<span class="highlighted">' + searchTerm + '</span>');
         }
+
+        // At last we return the extracted links into the word.
+        word = word.replace(/\$(\d+)/g, function(match, p1) {
+            return links[p1 - 1];
+        });
 
         return word;
     }
