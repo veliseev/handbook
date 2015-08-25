@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+    <form action="{{ path("fos_user_security_check") }}" method="POST" class="form-signin">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+        <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" required="required" placeholder="Username" />
+
+        <input type="password" id="password" name="_password" class="form-control" required="required" placeholder="Password" />
+
+        <div class="checkbox">
+            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+            <label for="remember_me">Remember me</label>
+        </div>
+
+        <input type="submit" id="_submit" name="_submit" value="Log in" class="btn btn-lg btn-primary btn-block" />
+    </form>
+{% endblock %}

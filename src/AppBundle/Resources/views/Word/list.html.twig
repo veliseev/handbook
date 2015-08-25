@@ -10,26 +10,30 @@
 
                     <thead>
 
-                    <th><input type="checkbox" id="checkall" /></th>
+                    {#<th><input type="checkbox" id="checkall" /></th>#}
                     <th>Word</th>
                     <th>Synonym</th>
                     <th>Explanation</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                    <th></th>
-                    <th></th>
+                    {#<th>Created At</th>
+                    <th>Updated At</th>#}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th></th>
+                        <th></th>
+                    {% endif %}
                     </thead>
                     <tbody>
                 {% for entity in pagination %}
                     <tr>
-                        <td><input type="checkbox" class="checkthis" /></td>
+                        {#<td><input type="checkbox" class="checkthis" /></td>}#}
                         <td>{{ entity.word|raw }}</td>
                         <td>{{ entity.synonym|raw }}</td>
                         <td>{{ entity.explanation|raw }}</td>
-                        <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y.m.d H:i:s') }}{% endif %}</td>
-                        <td>{% if entity.createdAt %}{{ entity.updatedAt|date('Y.m.d H:i:s') }}{% endif %}</td>
-                        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" onclick="location.href = '{{ path('word_edit', {'slug': entity.slug}) }}'" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-                        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" onclick="location.href = '{{ path('word_delete', {'id': entity.id}) }}'" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                        {#<td>{% if entity.createdAt %}{{ entity.createdAt|date('Y.m.d H:i:s') }}{% endif %}</td>
+                        <td>{% if entity.createdAt %}{{ entity.updatedAt|date('Y.m.d H:i:s') }}{% endif %}</td>#}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" onclick="location.href = '{{ path('word_edit', {'slug': entity.slug}) }}'" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                            <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" onclick="location.href = '{{ path('word_delete', {'id': entity.id}) }}'" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                     </tbody>

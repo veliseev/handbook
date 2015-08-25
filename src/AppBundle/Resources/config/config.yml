@@ -10,7 +10,7 @@ knp_paginator:
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
 
 parameters:
-    appbundle_word_count_per_page: 5
+    appbundle_word_count_per_page: 15
 
 services:
     #my.listener:

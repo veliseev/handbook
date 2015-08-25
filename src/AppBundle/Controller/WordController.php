@@ -32,6 +32,7 @@ class WordController extends Controller
      */
     public function indexAction(Request $request)
     {
+
         $search = $request->get('word', null);
         $words = array();
 
@@ -149,7 +150,7 @@ class WordController extends Controller
     /**
      * Finds and displays a Word entity.
      *
-     * @Route("/{slug}", name="word_show")
+     * @Route("/show/{slug}", name="word_show")
      * @Method("GET")
      * @Template()
      */
@@ -221,7 +222,7 @@ class WordController extends Controller
     /**
      * Edits an existing Word entity.
      *
-     * @Route("/word/update/{id}", name="word_update")
+     * @Route("/update/{id}", name="word_update")
      * @Method("POST")
      * @Template("AppBundle:Word:edit.html.twig")
      */
@@ -268,9 +269,8 @@ class WordController extends Controller
             throw $this->createNotFoundException('Unable to find Word entity.');
         }
 
-            $em->remove($entity);
-            $em->flush();
-        //}
+        $em->remove($entity);
+        $em->flush();
 
         return $this->redirect($this->generateUrl('word_list'));
     }
