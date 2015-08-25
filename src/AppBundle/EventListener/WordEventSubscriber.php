@@ -53,7 +53,7 @@ class WordEventSubscriber implements EventSubscriber
                     ->setParameter('slug', $match);
 
                 if ($word = $query->getOneOrNullResult()) {
-                    $url = $this->router->generate('word_edit', array('slug' => $word->getSlug()));
+                    $url = $this->router->generate('word_show', array('slug' => $word->getSlug()));
 
                     $entity->setSynonym(
                         str_replace('[' . $match . ']', '<a href="' . $url . '">[' . $match . ']</a>', $entity->getSynonym())
@@ -68,7 +68,7 @@ class WordEventSubscriber implements EventSubscriber
                     ->setParameter('slug', $match);
 
                 if ($word = $query->getOneOrNullResult()) {
-                    $url = $this->router->generate('word_edit', array('slug' => $word->getSlug()));
+                    $url = $this->router->generate('word_show', array('slug' => $word->getSlug()));
 
                     $entity->setExplanation(
                         str_replace('[' . $match . ']', '<a href="' . $url . '">[' . $match . ']</a>', $entity->getExplanation())

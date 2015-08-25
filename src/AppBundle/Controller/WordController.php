@@ -149,24 +149,24 @@ class WordController extends Controller
     /**
      * Finds and displays a Word entity.
      *
-     * @Route("/{id}", name="word_show")
+     * @Route("/{slug}", name="word_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:Word')->find($id);
+        $entity = $em->getRepository('AppBundle:Word')->findOneBy(array('slug' => $slug));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Word entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
